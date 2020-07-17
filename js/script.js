@@ -17,7 +17,7 @@ class HeroApp {
     this.currentHeroes = [...this.heroCards];
     this.createSortValues(this.currentHeroes);
     this.insertSortValues();
-    this.loadCards();
+    this.loadCards(this.heroCards);
     this.openHeroInfoEvents();
   }
 
@@ -139,14 +139,15 @@ class HeroApp {
 
   filterCards(filterKey, filterValue) {
     this.cardRow.textContent = "";
+    this.currentHeroes = [];
 
     for (const item of this.heroCards) {
       if (Object.keys(item).includes(filterKey)) {
         if (item[filterKey] === filterValue) {
-          this.cardRow.append(this.createHeroCard(item));
+          this.currentHeroes.push(item);
         } else if (Array.isArray(item[filterKey])) {
           if (item[filterKey].includes(filterValue)) {
-            this.cardRow.append(this.createHeroCard(item));
+            this.currentHeroes.push(item);
           }
         }
       }
@@ -196,23 +197,27 @@ class HeroApp {
         if (Object.keys(this.sortCollect).includes(target.value)) {
           changeValues(target);
           this.filterCards(this.selectName.value, this.selectValue.value);
+          this.loadCards(this.currentHeroes);
         } else if (target.value.toLowerCase() === 'all-heroes') {
           this.selectValue.innerHTML = `<option class="default-option" 
           selected disabled value="disabled-default">Опция</option>`;
-          this.loadCards();
+          this.loadCards(this.heroCards);
         }
       } else if (target.id === 'sort-value') {
         this.filterCards(this.selectName.value, this.selectValue.value);
+        this.loadCards(this.currentHeroes);
       }
     });
   }
 
-  loadCards() {
+  loadCards(cards) {
     this.cardRow.textContent = "";
 
-    for (const item of this.heroCards) {
+    for (const item of cards) {
       this.cardRow.append(this.createHeroCard(item));
     }
+
+    this.heroCount.textContent = cards.length;
   }
 }
 
