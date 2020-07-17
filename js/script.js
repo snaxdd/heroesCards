@@ -18,7 +18,7 @@ class HeroApp {
     this.createSortValues(this.currentHeroes);
     this.insertSortValues();
     this.loadCards(this.heroCards);
-    this.openHeroInfoEvents();
+    this.heroInfoEvents();
   }
 
   loadData(callback) {
@@ -107,10 +107,8 @@ class HeroApp {
     });
   }
 
-  openHeroInfoEvents() {
-    const heroCards = document.querySelector('.cards-container > .row');
-
-    heroCards.addEventListener("click", (event) => {
+  heroInfoEvents() {
+    this.cardRow.addEventListener("click", (event) => {
       const target = event.target;
 
       if (target.closest('.hero-card__more-info-btn')) {
@@ -133,6 +131,34 @@ class HeroApp {
           },
           duration: 400
         });
+      }
+    });
+
+    this.sortBx.addEventListener('change', (event) => {
+      const target = event.target;
+      
+      const changeValues = (target) => {
+        this.selectValue.textContent = "";
+        this.selectValue.insertAdjacentHTML('beforeend',
+          `<option class="default-option" selected disabled value="disabled-default">Опция</option>`);
+        this.sortCollect[target.value].forEach(item => {
+          this.selectValue.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+        });
+      };
+      
+      if (target.id === 'sort-name') {
+        if (Object.keys(this.sortCollect).includes(target.value)) {
+          changeValues(target);
+          this.filterCards(this.selectName.value, this.selectValue.value);
+          this.loadCards(this.currentHeroes);
+        } else if (target.value.toLowerCase() === 'all-heroes') {
+          this.selectValue.innerHTML = `<option class="default-option" 
+          selected disabled value="disabled-default">Опция</option>`;
+          this.loadCards(this.heroCards);
+        }
+      } else if (target.id === 'sort-value') {
+        this.filterCards(this.selectName.value, this.selectValue.value);
+        this.loadCards(this.currentHeroes);
       }
     });
   }
@@ -180,34 +206,6 @@ class HeroApp {
     }
 
     this.selectName.insertAdjacentHTML('beforeend', `<option value="All-heroes">All heroes</option>`);
-
-    const changeValues = (target) => {
-      this.selectValue.textContent = "";
-      this.selectValue.insertAdjacentHTML('beforeend',
-        `<option class="default-option" selected disabled value="disabled-default">Опция</option>`);
-      this.sortCollect[target.value].forEach(item => {
-        this.selectValue.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
-      });
-    };
-
-    this.sortBx.addEventListener('change', (event) => {
-      const target = event.target;
-
-      if (target.id === 'sort-name') {
-        if (Object.keys(this.sortCollect).includes(target.value)) {
-          changeValues(target);
-          this.filterCards(this.selectName.value, this.selectValue.value);
-          this.loadCards(this.currentHeroes);
-        } else if (target.value.toLowerCase() === 'all-heroes') {
-          this.selectValue.innerHTML = `<option class="default-option" 
-          selected disabled value="disabled-default">Опция</option>`;
-          this.loadCards(this.heroCards);
-        }
-      } else if (target.id === 'sort-value') {
-        this.filterCards(this.selectName.value, this.selectValue.value);
-        this.loadCards(this.currentHeroes);
-      }
-    });
   }
 
   loadCards(cards) {
@@ -226,10 +224,3 @@ init.loadData(() => {
   init.init();
 });
 
-
-/*if (target.id === 'sort-name') {
-  changeValues(target);
-  this.filterCards(this.selectName.value, this.selectValue.value);
-} else if (target.id === 'sort-value') {
-  this.filterCards(this.selectName.value, this.selectValue.value);
-}*/

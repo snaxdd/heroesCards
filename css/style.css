@@ -47,6 +47,7 @@ header.header {
     background-color: rgb(90, 90, 90);
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 15px -5px rgba(28, 27, 29, 0.5);
 }
 
 .hero-card::after {
@@ -201,6 +202,12 @@ table.hero-card__table td {
     margin-left: 20px;
 }
 
+#hero-count {
+    font-weight: 800;
+    font-size: 1rem;
+    color: rgb(102, 60, 199);
+}
+
 @media screen and (max-width: 540px) {
     .header .row {
         justify-content: center;
@@ -213,6 +220,6 @@ table.hero-card__table td {
     }
 
     .sort-films {
-        margin: 0;
+        margin: 0 0 15px 0;
     }
 }
