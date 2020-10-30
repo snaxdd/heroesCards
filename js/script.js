@@ -219,7 +219,7 @@ class HeroApp {
   }
 }
 
-const init = new HeroApp('../json/dbHeroes.json');
+const init = new HeroApp('https://snaxdd.github.io/heroesCards/json/dbHeroes.json');
 init.loadData(() => {
   init.init();
 });
